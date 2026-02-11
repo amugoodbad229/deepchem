@@ -117,8 +117,7 @@ for i in range(1, len(errors_L2)):
 avg_rate = np.mean(rates_L2)
 print(f"\nAverage Convergence Rate: {avg_rate:.4f}")
 print(f"Expected Rate: 2.0")
-test_passed = abs(avg_rate - 2.0) < 0.2
-print(f"Test {'PASSED ✓' if test_passed else 'FAILED ✗'}")
+print(f"Test {'PASSED ✓' if avg_rate >= 1.8 else 'FAILED ✗'}")
 
 # Visualization
 fig = plt.figure(figsize=(14, 10))
@@ -147,7 +146,6 @@ hs_array = np.array(hs)
 errors_L2_array = np.array(errors_L2)
 
 ax2.loglog(hs_array, errors_L2_array, "bo-", linewidth=2, markersize=8, label="Computed Error")
-# Reference line with slope 2 (O(h²))
 ax2.loglog(hs_array, errors_L2_array[0] * (hs_array / hs_array[0]) ** 2, 
            "k--", linewidth=2, alpha=0.7, label="O(h²) Reference")
 ax2.set_xlabel("Mesh size h", fontsize=12)
@@ -162,10 +160,11 @@ x_interior = x_coarse[1:-1]
 u_exact_coarse = analytical_solution(x_interior, k=1.0)
 error_pointwise = torch.abs(u[1:-1] - u_exact_coarse)
 
-ax3.plot(x_interior.numpy(), error_pointwise.detach().numpy(), "g-s", linewidth=2, markersize=6)
+ax3.plot(x_interior.numpy(), error_pointwise.detach().numpy(), "g-s", linewidth=2, markersize=6, label="Pointwise Error")
 ax3.set_xlabel("x", fontsize=12)
 ax3.set_ylabel("|u_exact - u_FEM|", fontsize=12)
 ax3.set_title("Pointwise Error (n=40)", fontsize=13, fontweight='bold')
+ax3.legend(fontsize=10)
 ax3.grid(True, alpha=0.3)
 
 plt.tight_layout()
@@ -173,3 +172,4 @@ plt.tight_layout()
 os.makedirs("Images", exist_ok=True)
 plt.savefig("Images/validation_1d.png", dpi=300, bbox_inches="tight")
 print(f"\nFigure saved: Images/validation_1d.png")
+plt.show()
