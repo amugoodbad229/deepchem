@@ -602,16 +602,3 @@ Idea 1 (Poisson) → Idea 2 (Heat) → Idea 3 (Mesh)
 6. **Integration:** Preferred API design for TorchModel?
 
 7. **Benchmarks:** Specific problems you'd like to see?
-
----
-
-## Contact
-
-**GitHub:** https://github.com/amugoodbad229  
-**Branch:** gsoc-fem-demo  
-**Email:** ayman.khan1971@gmail.com
-**Discord:** 
-
----
-
-*This work is part of GSoC 2026 application for Differentiable FEM/FVM project with DeepChem.*

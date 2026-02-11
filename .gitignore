@@ -109,4 +109,3 @@ env.yml
 **/*.ipynb_checkpoints/
 
 .database/
-
