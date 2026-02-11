@@ -175,7 +175,7 @@ Area Preservation Test: PASSED ✓
 ## Contact
 
 **GitHub:** https://github.com/amugoodbad229  
-**Email:** ayman.khan1971@gmail.com
+**Email:** ayman.khan1971@gmail.com  
 **Discord:** batman
 
 ---
