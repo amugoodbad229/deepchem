@@ -109,3 +109,9 @@ env.yml
 **/*.ipynb_checkpoints/
 
 .database/
+
+pdfs/
+
+# GSOC 2026 - Local planning files (not for GitHub)
+IDEA/
+IMMEDIATE_ACTION_PLAN.md
