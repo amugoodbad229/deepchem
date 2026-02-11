@@ -589,16 +589,9 @@ Idea 1 (Poisson) → Idea 2 (Heat) → Idea 3 (Mesh)
 
 ## Questions for Mentors
 
-1. **Scope:** Should the main project focus on FEM or FVM (or both)?
-
-2. **Priority:** 2D first, or jump directly to 3D?
-
-3. **Elements:** P1 triangles sufficient, or need P2/quadrilaterals?
-
-4. **Meshes:** Support for external formats (GMSH, VTK, etc.)?
-
-5. **Applications:** Which scientific domains to prioritize?
-
-6. **Integration:** Preferred API design for TorchModel?
-
-7. **Benchmarks:** Specific problems you'd like to see?
+1. **Priority:** 2D first, or jump directly to 3D?
+2. **Elements:** P1 triangles sufficient, or need P2/quadrilaterals?
+3. **Meshes:** Support for external formats (GMSH, VTK, etc.)?
+4. **Applications:** Which scientific domains to prioritize?
+5. **Integration:** Preferred API design for TorchModel?
+6. **Benchmarks:** Specific problems you'd like to see?
