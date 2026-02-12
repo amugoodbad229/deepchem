@@ -144,7 +144,7 @@ class TestHeatConduction:
                         model.conductivity.data, min=0.1, max=20.0
                     )
 
-                scheduler.step(loss)
+                scheduler.step(loss.detach())
 
                 # Early stopping with patience
                 current_loss = loss.item()
