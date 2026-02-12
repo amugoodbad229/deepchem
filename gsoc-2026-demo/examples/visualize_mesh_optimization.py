@@ -40,10 +40,10 @@ class SimpleMesh2D(nn.Module):
         """Identify boundary nodes"""
         nx, ny = self.nx, self.ny
         boundary_mask = torch.zeros(nx * ny, dtype=torch.bool)
-        boundary_mask[0:nx * ny:ny] = True
-        boundary_mask[ny - 1:nx * ny:ny] = True
+        boundary_mask[0 : nx * ny : ny] = True
+        boundary_mask[ny - 1 : nx * ny : ny] = True
         boundary_mask[0:ny] = True
-        boundary_mask[(nx - 1) * ny:nx * ny] = True
+        boundary_mask[(nx - 1) * ny : nx * ny] = True
 
         self.boundary_mask = boundary_mask
         self.corners = torch.tensor(
@@ -401,8 +401,8 @@ plt.suptitle(
 )
 
 os.makedirs("Images", exist_ok=True)
-plt.savefig("Images/validation_mesh.png", dpi=300, bbox_inches="tight")
-print("Figure saved: Images/validation_mesh.png")
+plt.savefig("Images/visualize_mesh_optimization.png", dpi=300, bbox_inches="tight")
+print("Figure saved: Images/visualize_mesh_optimization.png")
 print("\n" + "=" * 70)
 print("VALIDATION COMPLETE")
 print("=" * 70)

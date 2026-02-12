@@ -29,8 +29,7 @@ class SimpleFEM1D(nn.Module):
         K = torch.zeros((n_interior, n_interior), dtype=torch.float32)
         F = torch.zeros(n_interior, dtype=torch.float32)
 
-        ke = (k / h) * torch.tensor([[1.0, -1.0], [-1.0, 1.0]],
-                                    dtype=torch.float32)
+        ke = (k / h) * torch.tensor([[1.0, -1.0], [-1.0, 1.0]], dtype=torch.float32)
 
         for elem in range(n):
             left_node = elem
@@ -106,7 +105,7 @@ for n in mesh_sizes:
         h = 1.0 / n
 
         # L2 error on interior nodes
-        error_L2 = torch.sqrt(torch.mean((u_num[1:-1] - u_exact)**2))
+        error_L2 = torch.sqrt(torch.mean((u_num[1:-1] - u_exact) ** 2))
 
         errors_L2.append(error_L2.item())
         hs.append(h)
@@ -135,11 +134,7 @@ x_fine = torch.linspace(0, 1, 200)
 x_coarse = torch.linspace(0, 1, 41)
 u_exact_fine = analytical_solution(x_fine, k=1.0)
 
-ax1.plot(x_fine.numpy(),
-         u_exact_fine.numpy(),
-         "k-",
-         linewidth=2,
-         label="Analytical")
+ax1.plot(x_fine.numpy(), u_exact_fine.numpy(), "k-", linewidth=2, label="Analytical")
 ax1.plot(
     x_coarse.numpy(),
     u.detach().numpy(),
@@ -151,9 +146,7 @@ ax1.plot(
 )
 ax1.set_xlabel("x", fontsize=12)
 ax1.set_ylabel("u(x)", fontsize=12)
-ax1.set_title("1D Poisson Equation: -u''(x) = sin(πx)",
-              fontsize=14,
-              fontweight="bold")
+ax1.set_title("1D Poisson Equation: -u''(x) = sin(πx)", fontsize=14, fontweight="bold")
 ax1.legend(fontsize=11)
 ax1.grid(True, alpha=0.3)
 
@@ -162,15 +155,12 @@ ax2 = fig.add_subplot(gs[1, 0])
 hs_array = np.array(hs)
 errors_L2_array = np.array(errors_L2)
 
-ax2.loglog(hs_array,
-           errors_L2_array,
-           "bo-",
-           linewidth=2,
-           markersize=8,
-           label="Computed Error")
+ax2.loglog(
+    hs_array, errors_L2_array, "bo-", linewidth=2, markersize=8, label="Computed Error"
+)
 ax2.loglog(
     hs_array,
-    errors_L2_array[0] * (hs_array / hs_array[0])**2,
+    errors_L2_array[0] * (hs_array / hs_array[0]) ** 2,
     "k--",
     linewidth=2,
     alpha=0.7,
@@ -178,9 +168,7 @@ ax2.loglog(
 )
 ax2.set_xlabel("Mesh size h", fontsize=12)
 ax2.set_ylabel("L2 Error", fontsize=12)
-ax2.set_title(f"Convergence Rate: {avg_rate:.3f}",
-              fontsize=13,
-              fontweight="bold")
+ax2.set_title(f"Convergence Rate: {avg_rate:.3f}", fontsize=13, fontweight="bold")
 ax2.legend(fontsize=10)
 ax2.grid(True, alpha=0.3, which="both")
 
@@ -207,6 +195,6 @@ ax3.grid(True, alpha=0.3)
 plt.tight_layout()
 
 os.makedirs("Images", exist_ok=True)
-plt.savefig("Images/validation_1d.png", dpi=300, bbox_inches="tight")
-print("\nFigure saved: Images/validation_1d.png")
+plt.savefig("Images/visualize_1d_fem.png", dpi=300, bbox_inches="tight")
+print("\nFigure saved: Images/visualize_1d_fem.png")
 plt.show()
