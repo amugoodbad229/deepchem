@@ -5,7 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "flake8>=7.3.0",
     "matplotlib>=3.10.8",
+    "mypy>=1.19.1",
     "numpy>=2.2.6",
+    "pytest>=9.0.2",
     "torch>=2.10.0",
+    "yapf>=0.43.0",
 ]

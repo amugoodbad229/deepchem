@@ -49,7 +49,7 @@ gsoc-2026-demo/
 ```bash
 # Setup
 uv init --python 3.10
-uv add torch numpy matplotlib
+uv add torch numpy matplotlib yapf flake8 mypy pytest
 
 # Run validations (generates figures in Images/)
 uv run python validation/validate_1d.py

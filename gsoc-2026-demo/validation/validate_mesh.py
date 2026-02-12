@@ -40,10 +40,10 @@ class SimpleMesh2D(nn.Module):
         """Identify boundary nodes"""
         nx, ny = self.nx, self.ny
         boundary_mask = torch.zeros(nx * ny, dtype=torch.bool)
-        boundary_mask[0 : nx * ny : ny] = True
-        boundary_mask[ny - 1 : nx * ny : ny] = True
+        boundary_mask[0:nx * ny:ny] = True
+        boundary_mask[ny - 1:nx * ny:ny] = True
         boundary_mask[0:ny] = True
-        boundary_mask[(nx - 1) * ny : nx * ny] = True
+        boundary_mask[(nx - 1) * ny:nx * ny] = True
 
         self.boundary_mask = boundary_mask
         self.corners = torch.tensor(
@@ -172,7 +172,7 @@ all_areas_correct = all(abs(r["area"] - 1.0) < 1e-6 for r in area_results)
 print(f"\nArea Conservation Test: {'PASSED ✓' if all_areas_correct else 'FAILED ✗'}")
 
 # Test 2: Mesh quality optimization
-print(f"\n[Test 2] Mesh Quality Optimization with Area Preservation")
+print("\n[Test 2] Mesh Quality Optimization with Area Preservation")
 print("-" * 70)
 
 mesh = SimpleMesh2D(nx=8, ny=8)
@@ -284,7 +284,7 @@ aspect_ratios = final_metrics["aspect_ratios"].detach().numpy()
 
 for i, elem in enumerate(elements_opt):
     coords = nodes_opt[elem]
-    color = cm.RdYlGn(aspect_ratios[i])
+    color = cm.RdYlGn(aspect_ratios[i])  # type: ignore
     poly = Polygon(
         coords,
         closed=True,
@@ -305,7 +305,7 @@ ax2.set_ylabel("y", fontsize=11)
 ax2.grid(True, alpha=0.2, linestyle="--")
 
 # Add colorbar
-sm = cm.ScalarMappable(cmap=cm.RdYlGn, norm=plt.Normalize(vmin=0, vmax=1))
+sm = cm.ScalarMappable(cmap=cm.RdYlGn, norm=plt.Normalize(vmin=0, vmax=1))  # type: ignore
 sm.set_array([])
 cbar = plt.colorbar(sm, ax=ax2, fraction=0.046, pad=0.04)
 cbar.set_label("Aspect Ratio Quality", fontsize=10)
@@ -342,7 +342,7 @@ ax3.set_title(
 )
 
 lines = line1 + line2 + line3
-labels = [l.get_label() for l in lines]
+labels = [str(ln.get_label()) for ln in lines]
 ax3.legend(lines, labels, fontsize=10, loc="lower right")
 
 ax3.tick_params(axis="y", labelcolor="b")

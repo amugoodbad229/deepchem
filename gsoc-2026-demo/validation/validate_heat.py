@@ -100,7 +100,10 @@ for k_true in k_true_values:
         experiment = HeatConductionFEM1D(n_elements=50)
         experiment.conductivity.data = torch.tensor(k_true)
         x = torch.linspace(0, 1, 51)
-        q = lambda x: torch.sin(np.pi * x)
+
+        def q(x):
+            return torch.sin(np.pi * x)
+
         T_true = experiment.solve_steady_state(0.0, 0.0, q)
         # Reduce noise level for better conditioning
         noise_level = 0.005 * torch.std(T_true)  # Reduced from 0.01 to 0.005
@@ -190,7 +193,7 @@ avg_error = np.mean([r["error_pct"] for r in results])
 max_error = np.max([r["error_pct"] for r in results])
 
 print(f"\n{'=' * 60}")
-print(f"SUMMARY STATISTICS")
+print("SUMMARY STATISTICS")
 print(f"{'=' * 60}")
 print(f"Average Recovery Error: {avg_error:.4f}%")
 print(f"Maximum Recovery Error: {max_error:.4f}%")
@@ -203,7 +206,7 @@ gs = GridSpec(2, 2, figure=fig, hspace=0.3, wspace=0.3)
 
 # Plot 1: Convergence curves for all k values
 ax1 = fig.add_subplot(gs[0, 0])
-colors = plt.cm.viridis(np.linspace(0, 1, len(results)))
+colors = plt.cm.viridis(np.linspace(0, 1, len(results)))  # type: ignore
 for i, res in enumerate(results):
     iterations = range(len(res["k_history"]))
     ax1.plot(
@@ -267,8 +270,8 @@ ax3.set_ylabel("Recovered k", fontsize=12, fontweight="bold")
 ax3.set_title("Recovery Accuracy (FEM)", fontsize=14, fontweight="bold")
 ax3.legend(fontsize=10)
 ax3.grid(True, alpha=0.3, linestyle="--")
-ax3.set_xlim([-0.5, 11])
-ax3.set_ylim([-0.5, 11])
+ax3.set_xlim(-0.5, 11)
+ax3.set_ylim(-0.5, 11)
 
 # Plot 4: Error percentage bar chart
 ax4 = fig.add_subplot(gs[1, 1])

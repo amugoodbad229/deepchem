@@ -56,13 +56,13 @@ class SimpleMesh2D(nn.Module):
         boundary_mask = torch.zeros(nx * ny, dtype=torch.bool)
 
         # Bottom edge: j=0
-        boundary_mask[0 : nx * ny : ny] = True
+        boundary_mask[0:nx * ny:ny] = True
         # Top edge: j=ny-1
-        boundary_mask[ny - 1 : nx * ny : ny] = True
+        boundary_mask[ny - 1:nx * ny:ny] = True
         # Left edge: i=0
         boundary_mask[0:ny] = True
         # Right edge: i=nx-1
-        boundary_mask[(nx - 1) * ny : nx * ny] = True
+        boundary_mask[(nx - 1) * ny: nx * ny] = True
 
         self.boundary_mask = boundary_mask
         self.interior_mask = ~boundary_mask
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     mesh = SimpleMesh2D(nx=4, ny=4)
     total_area = mesh.compute_total_area()
     print(f"Initial total area: {total_area:.10f}")
-    print(f"Expected: 1.0000000000")
+    print("Expected: 1.0000000000")
     print(f"Test: {'PASSED ✓' if abs(total_area - 1.0) < 1e-8 else 'FAILED ✗'}")
 
     # Test 2: Quality metrics
