@@ -157,7 +157,7 @@ Error: 0.0000
 
 ### Validation Methodology
 
-**File:** `validation/validate_1d.py`
+**File:** `examples/visualize_1d_fem.py`
 
 #### Convergence Study Results
 
@@ -280,7 +280,7 @@ Temperature at midpoint: 0.040528
 
 ### Validation Results
 
-**File:** `validation/validate_heat.py`
+**File:** `examples/visualize_heat_conduction.py`
 
 #### Parameter Recovery Study
 
@@ -439,7 +439,7 @@ For a structured grid with right triangles: $Q = \frac{\sqrt{3}}{2} \approx 0.86
 
 ### Validation Results
 
-**File:** `validation/validate_mesh.py`
+**File:** `examples/visualize_mesh_optimization.py`
 
 #### Test 1: Area Conservation
 
