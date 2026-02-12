@@ -28,20 +28,26 @@ This repository contains proof-of-concept implementations demonstrating differen
 
 ```
 gsoc-2026-demo/
-├── implementations/
-│   ├── __init__.py
-│   ├── simple_fem_1d.py      # 1D Poisson FEM solver
-│   ├── heat_conduction.py    # Heat equation with inverse problem
-│   └── mesh_2d.py            # 2D triangular mesh with autograd
-├── validation/
-│   ├── validate_1d.py        # Convergence study
-│   ├── validate_heat.py      # Parameter recovery tests
-│   ├── validate_mesh.py      # Area + quality validation
-│   └── test_validation.py    # Pytest test suite
-├── Images/                    # Generated validation figures
-├── README.md                  # This file
-└── DETAILED_EXPLANATION.md    # Technical documentation
+├── implementations/          # Core FEM implementation modules
+│   ├── __init__.py          # Package exports
+│   ├── simple_fem_1d.py     # 1D Poisson FEM solver with autograd
+│   ├── heat_conduction.py   # 1D Heat equation with inverse problem
+│   └── mesh_2d.py           # 2D triangular mesh with differentiable geometry
+├── tests/                    # Unit tests (pytest)
+│   └── test_validation.py   # Comprehensive test suite for all implementations
+├── examples/                 # Demonstration scripts (generates figures)
+│   ├── visualize_1d_fem.py           # 1D Poisson convergence visualization
+│   ├── visualize_heat_conduction.py  # Heat inverse problem visualization
+│   └── visualize_mesh_optimization.py # Mesh quality optimization visualization
+├── Images/                   # Generated validation figures
+├── README.md                 # This file
+└── DETAILED_EXPLANATION.md   # Technical documentation with math derivations
 ```
+
+**Folder Purposes:**
+- **`implementations/`** — Core reusable FEM modules (import these)
+- **`tests/`** — Automated unit tests run with pytest
+- **`examples/`** — Standalone scripts that generate visualizations
 
 ---
 
@@ -76,13 +82,13 @@ uv add torch numpy matplotlib yapf flake8 mypy pytest
 uv sync
 ```
 
-### Run Validations
+### Run Examples (Generate Visualizations)
 
 ```bash
 # Generate validation figures in Images/
-uv run python validation/validate_1d.py
-uv run python validation/validate_heat.py
-uv run python validation/validate_mesh.py
+uv run python examples/visualize_1d_fem.py
+uv run python examples/visualize_heat_conduction.py
+uv run python examples/visualize_mesh_optimization.py
 ```
 
 ---
@@ -93,15 +99,15 @@ This project includes a comprehensive pytest test suite that validates all imple
 
 ```bash
 # Run all tests
-uv run pytest validation/test_validation.py -v
+uv run pytest tests/test_validation.py -v
 
 # Run specific test classes
-uv run pytest validation/test_validation.py::TestFEM1D -v
-uv run pytest validation/test_validation.py::TestHeatConduction -v
-uv run pytest validation/test_validation.py::TestMesh2D -v
+uv run pytest tests/test_validation.py::TestFEM1D -v
+uv run pytest tests/test_validation.py::TestHeatConduction -v
+uv run pytest tests/test_validation.py::TestMesh2D -v
 
 # Run with coverage
-uv run pytest validation/test_validation.py --cov=implementations --cov-report=html
+uv run pytest tests/test_validation.py --cov=implementations --cov-report=html
 ```
 
 ### Test Coverage
@@ -122,16 +128,16 @@ This project follows [DeepChem's contribution guidelines](https://github.com/dee
 
 ```bash
 # Format code with yapf
-uv run yapf -i implementations/__init__.py implementations/simple_fem_1d.py implementations/heat_conduction.py implementations/mesh_2d.py validation/validate_1d.py validation/validate_heat.py validation/validate_mesh.py validation/test_validation.py
+uv run yapf -i implementations/__init__.py implementations/simple_fem_1d.py implementations/heat_conduction.py implementations/mesh_2d.py examples/visualize_1d_fem.py examples/visualize_heat_conduction.py examples/visualize_mesh_optimization.py tests/test_validation.py
 
 # Check code style with flake8
-uv run flake8 implementations/ validation/
+uv run flake8 implementations/ tests/ examples/
 
 # Type checking with mypy
-uv run mypy implementations/ validation/
+uv run mypy implementations/ tests/ examples/
 
 # Run all quality checks
-uv run flake8 implementations/ validation/ && uv run mypy implementations/ validation/
+uv run flake8 implementations/ tests/ examples/ && uv run mypy implementations/ tests/ examples/
 ```
 
 ### Pre-commit Checks
@@ -250,8 +256,8 @@ This project follows the [DeepChem Contribution Guidelines](https://github.com/d
 4. **Run quality checks**:
    ```bash
    uv run yapf -i implementations/*.py validation/*.py
-   uv run flake8 implementations/ validation/
-   uv run mypy implementations/ validation/
+   uv run flake8 implementations/ tests/ examples/
+   uv run mypy implementations/ tests/ examples/
    uv run pytest validation/
    ```
 5. **Commit** with clear messages following conventional commits
