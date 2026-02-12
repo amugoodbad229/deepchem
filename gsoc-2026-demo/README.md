@@ -47,12 +47,39 @@ gsoc-2026-demo/
 
 ## Quick Start
 
+### Prerequisites
+
+This project uses [**uv**](https://github.com/astral-sh/uv) for Python package management. Install uv first:
+
+**Windows:**
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**macOS/Linux:**
 ```bash
-# Setup
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+For other installation methods, see the [uv documentation](https://docs.astral.sh/uv/getting-started/installation/).
+
+### Setup
+
+```bash
+# Initialize the project (creates virtual environment)
 uv init --python 3.10
+
+# Install dependencies
 uv add torch numpy matplotlib yapf flake8 mypy pytest
 
-# Run validations (generates figures in Images/)
+# OR if pyproject.toml already exists, sync dependencies:
+uv sync
+```
+
+### Run Validations
+
+```bash
+# Generate validation figures in Images/
 uv run python validation/validate_1d.py
 uv run python validation/validate_heat.py
 uv run python validation/validate_mesh.py
