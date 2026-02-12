@@ -79,7 +79,7 @@ class TestFEM1D:
         fem = SimpleFEM1D(n_elements=20, k=1.0)
         optimizer = torch.optim.Adam([fem.k], lr=0.1)
 
-        for epoch in range(200):
+        for _ in range(200):  # Training iterations
             optimizer.zero_grad()
             u_pred = fem.solve(source_func)
             loss = torch.mean((u_pred - target) ** 2)
@@ -131,7 +131,7 @@ class TestHeatConduction:
             patience_counter = 0
             patience_limit = 100
 
-            for epoch in range(1000):
+            for _ in range(1000):  # Training iterations
                 optimizer.zero_grad()
                 T_pred = model.solve_steady_state(0.0, 0.0, q)
                 loss = torch.mean((T_pred - T_measured) ** 2)
