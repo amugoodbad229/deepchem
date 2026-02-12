@@ -29,7 +29,8 @@ class HeatConductionFEM1D(nn.Module):
         K = torch.zeros((n_nodes, n_nodes), dtype=torch.float32)
         F = torch.zeros(n_nodes, dtype=torch.float32)
 
-        ke = (k / h) * torch.tensor([[1.0, -1.0], [-1.0, 1.0]], dtype=torch.float32)
+        ke = (k / h) * torch.tensor([[1.0, -1.0], [-1.0, 1.0]],
+                                    dtype=torch.float32)
 
         for elem in range(n):
             left_node = elem
@@ -122,9 +123,11 @@ for k_true in k_true_values:
     optimizer = torch.optim.Adam([model.conductivity], lr=initial_lr)
 
     # Learning rate scheduler: reduce on plateau
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode="min", factor=0.5, patience=20, min_lr=1e-4
-    )
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer,
+                                                           mode="min",
+                                                           factor=0.5,
+                                                           patience=20,
+                                                           min_lr=1e-4)
 
     losses = []
     k_history = []
@@ -137,7 +140,7 @@ for k_true in k_true_values:
     for epoch in range(max_epochs):
         optimizer.zero_grad()
         T_pred = model.solve_steady_state(0.0, 0.0, q)
-        loss = torch.mean((T_pred - T_measured) ** 2)
+        loss = torch.mean((T_pred - T_measured)**2)
         loss.backward()
 
         # === KEY FIX: Gradient clipping to prevent instability ===
@@ -147,9 +150,9 @@ for k_true in k_true_values:
 
         # === KEY FIX: Enforce positivity constraint ===
         with torch.no_grad():
-            model.conductivity.data = torch.clamp(
-                model.conductivity.data, min=0.1, max=20.0
-            )
+            model.conductivity.data = torch.clamp(model.conductivity.data,
+                                                  min=0.1,
+                                                  max=20.0)
 
         losses.append(loss.item())
         k_history.append(model.conductivity.item())
@@ -174,20 +177,16 @@ for k_true in k_true_values:
     k_recovered = model.conductivity.item()
     error_pct = abs(k_recovered - k_true) / k_true * 100
 
-    results.append(
-        {
-            "k_true": k_true,
-            "k_recovered": k_recovered,
-            "error_pct": error_pct,
-            "k_history": k_history,
-            "losses": losses,
-        }
-    )
+    results.append({
+        "k_true": k_true,
+        "k_recovered": k_recovered,
+        "error_pct": error_pct,
+        "k_history": k_history,
+        "losses": losses,
+    })
 
-    print(
-        f"k_true={k_true:>5.2f} → k_recovered={k_recovered:>8.6f} "
-        f"(error={error_pct:>6.4f}%, converged in {len(k_history)} iters)"
-    )
+    print(f"k_true={k_true:>5.2f} → k_recovered={k_recovered:>8.6f} "
+          f"(error={error_pct:>6.4f}%, converged in {len(k_history)} iters)")
 
 avg_error = np.mean([r["error_pct"] for r in results])
 max_error = np.max([r["error_pct"] for r in results])
@@ -197,7 +196,9 @@ print("SUMMARY STATISTICS")
 print(f"{'=' * 60}")
 print(f"Average Recovery Error: {avg_error:.4f}%")
 print(f"Maximum Recovery Error: {max_error:.4f}%")
-print(f"Test: {'PASSED ✓' if avg_error < 5.0 and max_error < 10.0 else 'FAILED ✗'}")
+print(
+    f"Test: {'PASSED ✓' if avg_error < 5.0 and max_error < 10.0 else 'FAILED ✗'}"
+)
 print(f"{'=' * 60}\n")
 
 # Visualization
@@ -217,13 +218,17 @@ for i, res in enumerate(results):
         label=f"k={res['k_true']:.1f}",
         alpha=0.8,
     )
-    ax1.axhline(
-        y=res["k_true"], color=colors[i], linestyle="--", linewidth=1.5, alpha=0.5
-    )
+    ax1.axhline(y=res["k_true"],
+                color=colors[i],
+                linestyle="--",
+                linewidth=1.5,
+                alpha=0.5)
 
 ax1.set_xlabel("Iteration", fontsize=12, fontweight="bold")
 ax1.set_ylabel("Conductivity k", fontsize=12, fontweight="bold")
-ax1.set_title("Parameter Convergence History (FEM)", fontsize=14, fontweight="bold")
+ax1.set_title("Parameter Convergence History (FEM)",
+              fontsize=14,
+              fontweight="bold")
 ax1.legend(loc="best", fontsize=9, framealpha=0.9)
 ax1.grid(True, alpha=0.3, linestyle="--")
 
@@ -231,7 +236,11 @@ ax1.grid(True, alpha=0.3, linestyle="--")
 ax2 = fig.add_subplot(gs[0, 1])
 for i, res in enumerate(results):
     iterations = range(len(res["losses"]))
-    ax2.semilogy(iterations, res["losses"], color=colors[i], linewidth=2, alpha=0.8)
+    ax2.semilogy(iterations,
+                 res["losses"],
+                 color=colors[i],
+                 linewidth=2,
+                 alpha=0.8)
 
 ax2.set_xlabel("Iteration", fontsize=12, fontweight="bold")
 ax2.set_ylabel("Loss (log scale)", fontsize=12, fontweight="bold")
@@ -243,7 +252,11 @@ ax3 = fig.add_subplot(gs[1, 0])
 k_trues = [r["k_true"] for r in results]
 k_recs = [r["k_recovered"] for r in results]
 
-ax3.plot([0, 11], [0, 11], "k--", linewidth=2, label="Perfect Recovery", alpha=0.7)
+ax3.plot([0, 11], [0, 11],
+         "k--",
+         linewidth=2,
+         label="Perfect Recovery",
+         alpha=0.7)
 ax3.scatter(
     k_trues,
     k_recs,
@@ -276,13 +289,17 @@ ax3.set_ylim(-0.5, 11)
 # Plot 4: Error percentage bar chart
 ax4 = fig.add_subplot(gs[1, 1])
 errors = [r["error_pct"] for r in results]
-bars = ax4.bar(
-    range(len(k_trues)), errors, color=colors, edgecolor="black", linewidth=1.5
-)
+bars = ax4.bar(range(len(k_trues)),
+               errors,
+               color=colors,
+               edgecolor="black",
+               linewidth=1.5)
 
 ax4.set_xlabel("Test Case", fontsize=12, fontweight="bold")
 ax4.set_ylabel("Relative Error (%)", fontsize=12, fontweight="bold")
-ax4.set_title(f"Recovery Error (Avg: {avg_error:.4f}%)", fontsize=14, fontweight="bold")
+ax4.set_title(f"Recovery Error (Avg: {avg_error:.4f}%)",
+              fontsize=14,
+              fontweight="bold")
 ax4.set_xticks(range(len(k_trues)))
 ax4.set_xticklabels([f"k={k:.1f}" for k in k_trues], rotation=45)
 ax4.axhline(

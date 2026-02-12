@@ -305,7 +305,10 @@ ax2.set_ylabel("y", fontsize=11)
 ax2.grid(True, alpha=0.2, linestyle="--")
 
 # Add colorbar
-sm = cm.ScalarMappable(cmap=cm.RdYlGn, norm=plt.Normalize(vmin=0, vmax=1))  # type: ignore
+sm = cm.ScalarMappable(
+    cmap=cm.RdYlGn,  # type: ignore
+    norm=plt.Normalize(vmin=0, vmax=1),
+)  # type: ignore
 sm.set_array([])
 cbar = plt.colorbar(sm, ax=ax2, fraction=0.046, pad=0.04)
 cbar.set_label("Aspect Ratio Quality", fontsize=10)

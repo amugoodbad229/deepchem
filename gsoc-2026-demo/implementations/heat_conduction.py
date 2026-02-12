@@ -46,7 +46,8 @@ class HeatConductionFEM1D(nn.Module):
         # Element stiffness matrix for 1D linear elements
         # From weak form: ∫ k * dφ_i/dx * dφ_j/dx dx
         # For linear elements: dφ/dx = ±1/h
-        ke = (k / h) * torch.tensor([[1.0, -1.0], [-1.0, 1.0]], dtype=torch.float32)
+        ke = (k / h) * torch.tensor([[1.0, -1.0], [-1.0, 1.0]],
+                                    dtype=torch.float32)
 
         # Loop over all elements
         for elem in range(n):
@@ -184,14 +185,18 @@ if __name__ == "__main__":
     for epoch in range(100):
         optimizer.zero_grad()
         T_pred = model.solve_steady_state(0.0, 0.0, q)
-        loss = torch.mean((T_pred - T_measured) ** 2)
+        loss = torch.mean((T_pred - T_measured)**2)
         loss.backward()
         optimizer.step()
 
         if epoch % 20 == 0:
-            print(f"Epoch {epoch}: k={model.conductivity.item():.4f}, loss={loss.item():.6f}")
+            print(
+                f"Epoch {epoch}: k={model.conductivity.item():.4f}, loss={loss.item():.6f}"
+            )
 
     print(f"\nRecovered k: {model.conductivity.item():.4f}")
     print(f"True k: {true_k}")
     print(f"Error: {abs(model.conductivity.item() - true_k):.4f}")
-    print(f"Relative error: {abs(model.conductivity.item() - true_k) / true_k * 100:.2f}%")
+    print(
+        f"Relative error: {abs(model.conductivity.item() - true_k) / true_k * 100:.2f}%"
+    )

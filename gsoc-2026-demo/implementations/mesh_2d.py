@@ -28,7 +28,8 @@ class SimpleMesh2D(nn.Module):
         xx, yy = torch.meshgrid(x, y, indexing="ij")
 
         # Nodes as learnable parameters for optimization
-        self.nodes = nn.Parameter(torch.stack([xx.flatten(), yy.flatten()], dim=1))
+        self.nodes = nn.Parameter(
+            torch.stack([xx.flatten(), yy.flatten()], dim=1))
 
         # Build connectivity (each quad → 2 triangles)
         elements = []
@@ -62,7 +63,7 @@ class SimpleMesh2D(nn.Module):
         # Left edge: i=0
         boundary_mask[0:ny] = True
         # Right edge: i=nx-1
-        boundary_mask[(nx - 1) * ny: nx * ny] = True
+        boundary_mask[(nx - 1) * ny:nx * ny] = True
 
         self.boundary_mask = boundary_mask
         self.interior_mask = ~boundary_mask
@@ -99,10 +100,9 @@ class SimpleMesh2D(nn.Module):
     def compute_total_area(self):
         """Compute total mesh area (should be 1.0 for unit square)"""
         total = torch.sum(
-            torch.stack(
-                [self.compute_element_area(i) for i in range(len(self.elements))]
-            )
-        )
+            torch.stack([
+                self.compute_element_area(i) for i in range(len(self.elements))
+            ]))
         return total
 
     def compute_aspect_ratio(self, element_idx):
@@ -142,8 +142,7 @@ class SimpleMesh2D(nn.Module):
             dict with 'aspect_ratios', 'min_aspect', 'mean_aspect'
         """
         aspect_ratios = torch.stack(
-            [self.compute_aspect_ratio(i) for i in range(len(self.elements))]
-        )
+            [self.compute_aspect_ratio(i) for i in range(len(self.elements))])
 
         return {
             "aspect_ratios": aspect_ratios,
@@ -219,7 +218,7 @@ if __name__ == "__main__":
 
         # Loss = maximize quality + preserve area
         quality_loss = -metrics["min_aspect"]
-        area_penalty = 10.0 * (current_area - mesh.target_area) ** 2
+        area_penalty = 10.0 * (current_area - mesh.target_area)**2
 
         loss = quality_loss + area_penalty
 
@@ -239,7 +238,8 @@ if __name__ == "__main__":
     )
     print(f"Area change: {abs(final_area - initial_area):.10f}")
 
-    quality_improved = final_quality["min_aspect"] > initial_quality["min_aspect"]
+    quality_improved = final_quality["min_aspect"] > initial_quality[
+        "min_aspect"]
     area_preserved = abs(final_area - 1.0) < 0.02  # Allow 2% error
 
     print(f"Quality Test: {'PASSED ✓' if quality_improved else 'FAILED ✗'}")

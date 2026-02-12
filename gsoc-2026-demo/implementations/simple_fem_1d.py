@@ -38,12 +38,13 @@ class SimpleFEM1D(nn.Module):
 
         # Element stiffness matrix for 1D linear elements
         # ke = (k/h) * [[1, -1], [-1, 1]]
-        ke = (k / h) * torch.tensor([[1.0, -1.0], [-1.0, 1.0]], dtype=torch.float32)
+        ke = (k / h) * torch.tensor([[1.0, -1.0], [-1.0, 1.0]],
+                                    dtype=torch.float32)
 
         # Loop over all elements [x_i, x_{i+1}]
         for elem in range(n):
             # Global node indices for this element
-            left_node = elem      # x_i
+            left_node = elem  # x_i
             right_node = elem + 1  # x_{i+1}
 
             # === STIFFNESS MATRIX ASSEMBLY ===
@@ -127,7 +128,8 @@ if __name__ == "__main__":
         u_exact = analytical_solution(x, k=1.0)
 
         # Compute error at interior nodes
-        error_interior = torch.norm(u[1:-1] - u_exact[1:-1]) / torch.norm(u_exact[1:-1])
+        error_interior = torch.norm(u[1:-1] - u_exact[1:-1]) / torch.norm(
+            u_exact[1:-1])
 
         if n == 10:
             print(f"Solution at nodes (n={n}): {u[1:-1]}")
@@ -159,12 +161,13 @@ if __name__ == "__main__":
     for epoch in range(200):
         optimizer.zero_grad()
         u_pred = fem.solve(source_func)
-        loss = torch.mean((u_pred - target) ** 2)
+        loss = torch.mean((u_pred - target)**2)
         loss.backward()
         optimizer.step()
 
         if epoch % 20 == 0:
-            print(f"Epoch {epoch}: k={fem.k.item():.4f}, loss={loss.item():.6f}")
+            print(
+                f"Epoch {epoch}: k={fem.k.item():.4f}, loss={loss.item():.6f}")
 
     print(f"\nRecovered k: {fem.k.item():.4f}")
     print(f"True k: {true_k}")

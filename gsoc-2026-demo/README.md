@@ -36,7 +36,8 @@ gsoc-2026-demo/
 ├── validation/
 │   ├── validate_1d.py        # Convergence study
 │   ├── validate_heat.py      # Parameter recovery tests
-│   └── validate_mesh.py      # Area + quality validation
+│   ├── validate_mesh.py      # Area + quality validation
+│   └── test_validation.py    # Pytest test suite
 ├── Images/                    # Generated validation figures
 ├── README.md                  # This file
 └── DETAILED_EXPLANATION.md    # Technical documentation
@@ -56,6 +57,70 @@ uv run python validation/validate_1d.py
 uv run python validation/validate_heat.py
 uv run python validation/validate_mesh.py
 ```
+
+---
+
+## Testing
+
+This project includes a comprehensive pytest test suite that validates all implementations:
+
+```bash
+# Run all tests
+uv run pytest validation/test_validation.py -v
+
+# Run specific test classes
+uv run pytest validation/test_validation.py::TestFEM1D -v
+uv run pytest validation/test_validation.py::TestHeatConduction -v
+uv run pytest validation/test_validation.py::TestMesh2D -v
+
+# Run with coverage
+uv run pytest validation/test_validation.py --cov=implementations --cov-report=html
+```
+
+### Test Coverage
+
+| Test Class | Description |
+|------------|-------------|
+| `TestFEM1D` | Tests 1D Poisson solver convergence rate and inverse problem |
+| `TestHeatConduction` | Tests heat equation inverse problem for multiple k values |
+| `TestMesh2D` | Tests area conservation, quality optimization, and boundary constraints |
+
+---
+
+## Code Quality
+
+This project follows [DeepChem's contribution guidelines](https://github.com/deepchem/deepchem/blob/master/CONTRIBUTING.md):
+
+### Linting and Type Checking
+
+```bash
+# Format code with yapf
+uv run yapf -i implementations/__init__.py implementations/simple_fem_1d.py implementations/heat_conduction.py implementations/mesh_2d.py validation/validate_1d.py validation/validate_heat.py validation/validate_mesh.py validation/test_validation.py
+
+# Check code style with flake8
+uv run flake8 implementations/ validation/
+
+# Type checking with mypy
+uv run mypy implementations/ validation/
+
+# Run all quality checks
+uv run flake8 implementations/ validation/ && uv run mypy implementations/ validation/
+```
+
+### Pre-commit Checks
+
+All code must pass the following before submission:
+- ✓ **YAPF** — Code formatting
+- ✓ **Flake8** — Style checking (PEP 8 compliance)
+- ✓ **mypy** — Type checking
+- ✓ **pytest** — Unit tests pass
+
+### Coding Standards
+
+- **NumPy-style docstrings** for all functions and classes
+- **Type hints** where applicable
+- **PEP 8** compliance (checked via flake8)
+- **No trailing whitespace** or blank lines with whitespace
 
 ---
 
@@ -140,6 +205,40 @@ Area error: 0.83%
 Quality Improvement Test: PASSED ✓
 Area Preservation Test: PASSED ✓
 ```
+
+---
+
+## Contributing
+
+This project follows the [DeepChem Contribution Guidelines](https://github.com/deepchem/deepchem/blob/master/CONTRIBUTING.md) and [Code of Conduct](https://github.com/deepchem/deepchem/blob/master/CODE_OF_CONDUCT.md).
+
+### Development Workflow
+
+1. **Fork** the repository and create a feature branch
+2. **Install** development dependencies:
+   ```bash
+   uv add torch numpy matplotlib yapf flake8 mypy pytest
+   ```
+3. **Make changes** following coding standards
+4. **Run quality checks**:
+   ```bash
+   uv run yapf -i implementations/*.py validation/*.py
+   uv run flake8 implementations/ validation/
+   uv run mypy implementations/ validation/
+   uv run pytest validation/
+   ```
+5. **Commit** with clear messages following conventional commits
+6. **Submit** a pull request for review
+
+### Code Standards Compliance
+
+All code in this repository:
+- Passes **flake8** style checking
+- Passes **mypy** type checking
+- Includes **NumPy-style docstrings**
+- Has **comprehensive test coverage** via pytest
+- Follows **PEP 8** style guidelines
+- Uses **meaningful variable names** (no single-letter variables except in math contexts)
 
 ---
 
